@@ -42,6 +42,7 @@
     "dotenv": "^17.2.2",
     "ioredis": "^5.7.0",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.0",
     "moongoose": "^0.0.5",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.2",

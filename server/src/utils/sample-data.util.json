@@ -1,0 +1,37 @@
+{
+    "name" : "NestJS Course",
+    "desc" : "Simple desc",
+    "price" : 10.99,
+    "demoUrl" : "demo",
+    "prerequisities" : [
+        { "title" : "Hallo"},
+        { "title" : "Hallo 1"},
+        { "title" : "Hallo 2"}
+    ],
+    "courseData" : [
+        {
+            "title" : "Introduction to ....",
+            "desc" : "Description of this module",
+            "videoUrl" : "link",
+            "videoThumbnail" : "link",
+            "videoSection" : "section",
+            "videoLength" : 5
+        },
+        {
+            "title" : "Introduction to ....",
+            "desc" : "Description of this module 1",
+            "videoUrl" : "link",
+            "videoThumbnail" : "link",
+            "videoSection" : "section",
+            "videoLength" : 5
+        },
+        {
+            "title" : "Introduction to ....",
+            "desc" : "Description of this module 2",
+            "videoUrl" : "link",
+            "videoThumbnail" : "link",
+            "videoSection" : "section",
+            "videoLength" : 5
+        }
+    ]
+}

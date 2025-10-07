@@ -18,8 +18,8 @@ export class RoleGuard implements CanActivate{
         return true;
        }
        const { user } = context.switchToHttp().getRequest();
-
-       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-       return user.role === requiredRole;
+        /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+       return user.role === requiredRole; 
+       
    }
 }

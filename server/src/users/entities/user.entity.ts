@@ -21,20 +21,22 @@ export class User {
     @Prop({ default: UserRole.STUDENT, enum: UserRole })
     role: UserRole;
 
-    
     @Prop()
     firstName: string;
 
     @Prop()
     lastName: string;
 
-    age?: number;
+    @Prop()
+    dob?: number;
 
+    @Prop()
     isAdmin: boolean;
 
     @Prop()
     avatar?: string;
 
+    @Prop()
     courses?: Array<{courseId : string}>
 }
 

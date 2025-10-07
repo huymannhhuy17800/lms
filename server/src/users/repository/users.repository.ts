@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { BaseRepository } from "src/common/base/base.repository";
-import { User } from "../entities/user.entity";
+import { User, UserRole } from "../entities/user.entity";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
+import { UpdateUserDto } from "../dto/update-user.dto";
 
 
 @Injectable()
@@ -19,6 +20,19 @@ export class UserRepository extends BaseRepository<User> {
         await this.userModel.findOneAndDelete({
             email : email
         })
+    }
+
+    async updateRoleInstructor(id : string) {
+        const updatedUser = await this.userModel.findOneAndUpdate({_id: id}, {$set : {role : UserRole.INSTRUCTOR}});
+        return updatedUser;
+    }
+
+    async findById(id : string) {
+        return await this.userModel.findById({id});
+    }
+
+    async findByIdAndUpdate(id : string, data: UpdateUserDto) {
+        return await this.userModel.findByIdAndUpdate({_id : id , $set : data});
     }
 
 }

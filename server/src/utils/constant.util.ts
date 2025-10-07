@@ -1,0 +1,1 @@
+export const IGNORED_ATTRIBUTES = '-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.createdAt -courseData.updatedAt -course-courseData.links';

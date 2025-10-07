@@ -1,11 +1,13 @@
 /* eslint-disable */
-import { Controller, Delete, Get, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { RoleGuard } from 'src/auth/guard/auth.guard';
 import { Role } from 'src/decorators/role.decorator';
 import { UserRole } from './entities/user.entity';
 import { ResponseUtil } from 'src/utils/response.util';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 @Role(UserRole.ADMIN)
@@ -14,31 +16,38 @@ export class UsersController {
     constructor(private readonly usersService : UsersService) {}
     
     @Get()
-    async findAll() {
-        return ResponseUtil.success('success', 'success', HttpStatus.OK);
+    findAll() {
+        return this.usersService.findAll();
     }
     
     @Get(':id')
-    async findOne() {
-        return "This action returns a user by id";
+    findOne(@Param('id') email: string) {
+        return this.usersService.findByEmail(email);
     }
 
-
-    
     @Post()
-    async createUser() {
-        return "This action creates a new user";
+    createUser(@Body() createUserDto: CreateUserDto) {
+        return this.usersService.createUser(createUserDto);
     }
     
-    @Put(':id')
-    async updateUser() {
-        return "This action updates a user by id";
+    @Patch('id')
+    updateUser(@Param('id') id: string ,@Body() updateUserDto : UpdateUserDto) { 
+        return this.usersService.updateUser(id, updateUserDto);
     }
 
     
     @Delete(':id')
-    async removeUser(@Param('id') email : string) {
+    removeUser(@Param('id') id : string) {
+        this.usersService.deleteUser(id);
+    }
 
-        this.usersService.deleteUserByEmail(email);
+    @Patch(':id')
+    updateInstructorRole(@Param('id') email: string) {
+        this.usersService.updateAccountToInstructor(email);
+    }
+
+    @Patch('')
+    enrollStudentToCourse() {
+        
     }
 }

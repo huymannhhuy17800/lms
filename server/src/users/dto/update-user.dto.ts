@@ -12,7 +12,7 @@ export class UpdateUserDto {
 
     @IsString()
     @IsOptional()
-    role : string;
+    avatar: string
 
     @IsString()
     @IsOptional()
@@ -21,5 +21,5 @@ export class UpdateUserDto {
     @IsString()
     @IsOptional()
     @Match('password')
-    confirmPassword : string;
+    confirmPassword: string
 }
