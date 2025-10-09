@@ -11,7 +11,7 @@ import { redisStore } from 'cache-manager-redis-yet';
             imports: [ConfigModule], // Config module for getting config from .env file
             useFactory: async (config : ConfigService) => {
                 const store = await redisStore({
-                    ttl : 3, // 30s
+                    ttl : 30 * 1000, // 30s
                     socket: {
                         host: config.get<string>('REDIS_URL'),
                         port: config.get<number>('REDIS_PORT')
