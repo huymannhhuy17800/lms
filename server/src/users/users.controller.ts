@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Put, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { RoleGuard } from 'src/auth/guard/auth.guard';
@@ -8,10 +8,12 @@ import { UserRole } from './entities/user.entity';
 import { ResponseUtil } from 'src/utils/response.util';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('users')
 @Role(UserRole.ADMIN)
 @UseGuards(AccessTokenGuard, RoleGuard)
+@UseInterceptors(CacheInterceptor)
 export class UsersController {
     constructor(private readonly usersService : UsersService) {}
     
@@ -46,8 +48,4 @@ export class UsersController {
         this.usersService.updateAccountToInstructor(email);
     }
 
-    @Patch('')
-    enrollStudentToCourse() {
-        
-    }
 }

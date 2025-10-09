@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { type Date, Types } from "mongoose";
 
 export type UserDocument = User & Document;
 
@@ -27,8 +28,8 @@ export class User {
     @Prop()
     lastName: string;
 
-    @Prop()
-    dob?: number;
+    @Prop({ type : Date})
+    dob?: Date;
 
     @Prop()
     isAdmin: boolean;

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -6,7 +6,10 @@ import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { RoleGuard } from 'src/auth/guard/auth.guard';
 import { UserRole } from 'src/users/entities/user.entity';
 import { Role } from 'src/decorators/role.decorator';
+import { CreateReviewDto } from './dto/create-review.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
+@UseInterceptors(CacheInterceptor)
 @Controller('courses')
 export class CoursesController {
     constructor(private courseService : CoursesService){}
@@ -43,6 +46,14 @@ export class CoursesController {
     @Delete(':id')
     deleteCourse(@Param('id') id : string) {
         return this.courseService.deleteCourse(id);
+    }
+
+    @Post(':id') 
+    addReview(@Request() req: {user : {sub: string}},@Body() createReviewDto : CreateReviewDto) {
+        const userId = req.user.sub;
+
+        return this.courseService.addReview(userId, createReviewDto);
+        
     }
 
 }

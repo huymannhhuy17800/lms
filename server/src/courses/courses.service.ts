@@ -1,13 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CoursesRepository } from './repository/course.repository';
 import {  CreateCourseDto } from './dto/create-course.dto';
 import { CourseData } from './entities/course-data.entity';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { UserRepository } from 'src/users/repository/users.repository';
+import { CreateReviewDto } from './dto/create-review.dto';
+import { Review } from './entities/review.entity';
+import { Types } from 'mongoose';
+import { type Cache } from 'cache-manager';
 
 @Injectable()
 export class CoursesService {
-    constructor(private courseRepo : CoursesRepository, private userRepo : UserRepository){}
+    constructor(private courseRepo : CoursesRepository, private userRepo : UserRepository,
+        @Inject('CACHE_MANAGER') private cacheManager : Cache
+    ){}
     
     async findAll() {
         return await this.courseRepo.findAll();
@@ -68,8 +74,9 @@ export class CoursesService {
     }
 
     async getSingleCourse(id : string) {
-        // const cacheKey = `course:${id}`;
-        return await this.courseRepo.getSingleCourse(id);
+        console.log("This will be printed 1 time if there is nothing on cache")
+        const course = await this.courseRepo.getSingleCourse(id);
+        return course;
     }
 
     async getAllCourse() {
@@ -86,5 +93,16 @@ export class CoursesService {
 
     async addQuestionToCourse() {
         
+    }
+
+    async addReview(userId : string, createReviewDto : CreateReviewDto) {
+        // Check if user enrolled to this course
+        const reviewEntity = new Review();
+        reviewEntity.user = new Types.ObjectId(userId);
+        reviewEntity.rating = createReviewDto.rating;
+        reviewEntity.comment = createReviewDto.comment;
+        return await this.courseRepo.save({
+            reviews : [ reviewEntity ],
+        })
     }
 }

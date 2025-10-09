@@ -7,18 +7,16 @@ import { Role } from 'src/decorators/role.decorator';
 import { RoleGuard } from 'src/auth/guard/auth.guard';
 
 @Controller('enrollment')
+@Role(UserRole.STUDENT)
+@UseGuards(AccessTokenGuard, RoleGuard)
 export class EnrollmentController {
     constructor(private readonly enrollmentService: EnrollmentService){}
 
-    @Role(UserRole.STUDENT)
-    @UseGuards(AccessTokenGuard, RoleGuard)
     @Post()
     enrollStudent(@Body() enrollDto: EnrollDto,@Request() req : {user: { sub: string }}) {
         return this.enrollmentService.enroll(req.user.sub, enrollDto.courseId);
     }
 
-    @Role(UserRole.STUDENT)
-    @UseGuards(AccessTokenGuard, RoleGuard)
     @Get()
     getAllEnrolledCourses(@Request() req: {user: {sub: string}}) {
         return this.enrollmentService.findAllEnrolledCourses(req.user.sub);
