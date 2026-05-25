@@ -6,13 +6,12 @@
 }
 
 body {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  overflow-y: hidden; /* Hide vertical scrollbar */
-  overflow-x: hidden; /* Hide horizontal scrollbar */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
 }
 
-body::-webkit-scrollbar {
+::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Edge, Opera */
 }
 
@@ -45,3 +44,12 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.login-icon-container {
+  @apply mt-4 flex w-full justify-around items-center;
+
+  .other-login-method-icon {
+    @apply border-1 border-[#5cd799] p-2 rounded-[5px] cursor-pointer hover:bg-gray-100;
+}
+}
+

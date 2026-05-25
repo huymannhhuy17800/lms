@@ -1,25 +1,21 @@
 'use client' // client component
 
 import React, { useState } from 'react'
-import Header from './components/Header';
+import Header from './components/skeleton/Header';
 import { Lenis } from 'lenis/react';
 import HeroSlider from './components/HeroSlider';
-import { slides } from './constants/slides';
+import { slides } from './constants/utils';
+import Footer from './components/skeleton/Footer';
+import CourseItem from './components/course/CourseItem';
 
 const Page = () => {
-
-    const [open, setOpen] = useState(false);
-    const [activeItem, setActiveItem] = useState(0);
-
   return (
     <Lenis root>
-    <Header open={open} activeItem={activeItem} setOpen={setOpen} />
-    <HeroSlider slides={slides}/>
-    <div className="h-[2000px] bg-gray-100">
-      {/* Additional content to enable scrolling */}
-    </div>
+      <HeroSlider slides={slides} />
+      <CourseItem />
+      <div className='h-96'></div>
     </Lenis>
-  )
+  );
 }
 
 export default Page

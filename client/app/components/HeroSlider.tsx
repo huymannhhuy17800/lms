@@ -23,6 +23,9 @@ const HeroSlider: FC<HeroSliderProps> = ({
 }) => {
   const [current, setCurrent] = useState(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [dragStart, setDragStart] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (slides.length <= 1) return;
@@ -41,9 +44,49 @@ const HeroSlider: FC<HeroSliderProps> = ({
   const prevSlide = () =>
     setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
 
+  // Drag handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setDragStart(e.clientX);
+    setIsDragging(true);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || dragStart === null) return;
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (!isDragging || dragStart === null) {
+      setIsDragging(false);
+      setDragStart(null);
+      return;
+    }
+
+    const dragEnd = e.clientX;
+    const dragDistance = dragStart - dragEnd;
+    const threshold = 50; // Minimum drag distance to trigger slide change
+
+    if (Math.abs(dragDistance) > threshold) {
+      if (dragDistance > 0) {
+        // Dragged left, show next slide
+        nextSlide();
+      } else {
+        // Dragged right, show previous slide
+        prevSlide();
+      }
+    }
+
+    setIsDragging(false);
+    setDragStart(null);
+  };
+
   return (
     <section
-      className={`relative w-full mx-auto overflow-hidden h-[300px] md:h-[400px] lg:h-[500px] ${className}`}
+      ref={sliderRef}
+      className={`relative w-full mx-auto overflow-hidden h-[300px] md:h-[500px] lg:h-[500px] md:mt-6 cursor-grab active:cursor-grabbing ${className}`}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
     >
       {/* Slides */}
       <div className="relative h-full flex items-center justify-center">
@@ -61,36 +104,15 @@ const HeroSlider: FC<HeroSliderProps> = ({
               <img
                 src={slides[current].url}
                 alt={slides[current].title}
-                className="w-full h-full object-cover"
+                className="w-full h-[90%] object-cover select-none"
+                draggable={false}
               />
-
-              {/* Overlay Box - left side */}
-              <div className="hidden md:block lg:block absolute top-1/2 left-6 md:left-10 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white p-4 md:p-6 rounded-lg max-w-[300px]">
-                <h1 className="text-lg md:text-2xl font-bold">
-                  {slides[current].title}
-                </h1>
-                {slides[current].subtitle && (
-                  <p className="text-gray-200 text-sm md:text-base mt-2">
-                    {slides[current].subtitle}
-                  </p>
-                )}
-                {slides[current].ctaText && slides[current].ctaLink && (
-                  <a
-                    href={slides[current].ctaLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition"
-                  >
-                    {slides[current].ctaText}
-                  </a>
-                )}
-              </div>
             </div>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Controls */}
+      {/* Arrow Controls */}
       <button
         onClick={prevSlide}
         aria-label="Previous Slide"
@@ -112,9 +134,8 @@ const HeroSlider: FC<HeroSliderProps> = ({
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
-            className={`w-3 h-3 rounded-full transition ${
-              idx === current ? "bg-white" : "bg-gray-400"
-            }`}
+            className={`w-3 h-3 rounded-full transition ${idx === current ? "bg-white" : "bg-gray-400"
+              }`}
           />
         ))}
       </div>
